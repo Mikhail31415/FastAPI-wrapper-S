@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .info, form {
+            background-color: #ffffff;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            width: 360px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .info:hover, form:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transform: translateY(-5px);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+        }
+        p, .api-key {
+            font-size: 16px;
+            text-align: center;
+            color: #666;
+        }
+        .api-key {
+            display: block;
+            margin-top: 5px;
+            word-wrap: break-word;
+        }
+        input[type=number], button {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #003970;
+        }
+        .pay-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .calculated-amount {
+            color: #007BFF;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            width: 100%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>Welcome, {{ email }}</h1>
+        <p>API Key:</p>
+        <div class="api-key">{{ api_key | escape }}</div>
+        <p>Remaining Verifications: {{ remaining_verifications }}</p>
+    </div>
+
+    <div class="divider"></div> <!-- Divider -->
+
+    <form action="/generate-api-key" method="post">
+        <button type="submit">Generate New API Key</button>
+    </form>
+
+    <div class="divider"></div> <!-- Divider -->
+
+    <form action="/update-requests" method="post">
+        <div class="pay-section">
+            <input type="number" name="amount" placeholder="Enter amount" min="1" required>
+            <span class="calculated-amount" id="calculatedAmount"></span>
+            <button class="small-button" type="submit">Pay</button>
+        </div>
+    </form>
+    <script>
+        const inputAmount = document.querySelector('input[type="number"]');
+        const calculatedText = document.getElementById('calculatedAmount');
+
+        inputAmount.addEventListener('input', function() {
+            calculatedText.textContent = (this.value / 10).toFixed(2) + ' т';
+        });
+    </script>
+</body>
+</html>
